@@ -6,14 +6,15 @@ let
         out[:] = 2x
     end
 
-    df = LineSearches.DifferentiableFunction(f,g!)
+    x = [-1., -1.]
+    df = Optim.DifferentiableFunction(f,g!, x)
 
     for (i, linesearch!) in enumerate(lsfunctions)
         println("Testing $(string(linesearch!))")
-        x = [-1., -1.]
+
         xtmp = copy(x)
-        grtmp = similar(x)
-        phi0 = df.fg!(x, grtmp)
+        phi0 = Optim.value_grad!(df, x)
+        grtmp = gradient(df)
         p = -grtmp
         dphi0 = dot(p, grtmp)
 
